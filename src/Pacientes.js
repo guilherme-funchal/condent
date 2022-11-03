@@ -2,10 +2,21 @@ import React from 'react';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Sidenav from './Components/Sidenav';
+import { useState, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+import Modal1 from "./Components/modals/Modal1";
 
 export default function Pacientes(){ 
+
+    const [showModal1, setShowModal1] = useState(false);
+    const [showModal2, setShowModal2] = useState(false);
+
     return (
+        
         <div>
+            
             <Header />
             <Sidenav /> 
 {/* Content Wrapper. Contains page content */}
@@ -16,6 +27,12 @@ export default function Pacientes(){
                         <div className="row mb-2">
                             <div className="col-sm-6">
                                 <h1 className="m-0">Pacientes</h1>
+                                <Button variant="primary" onClick={() => setShowModal1(true)}>
+                                    Launch demo modal
+                                </Button>
+                                <Modal1 title="My Modal1" onClose={() => setShowModal1(false)} show={showModal1}>
+                                </Modal1>
+
                             </div>{/* /.col */}
                         </div>{/* /.row */}
                     </div>{/* /.container-fluid */}
@@ -64,6 +81,8 @@ export default function Pacientes(){
                 {/* /.content */}
             </div>
             <Footer />
+
     </div>
     )
+    
 }
