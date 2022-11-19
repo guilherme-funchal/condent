@@ -22,45 +22,8 @@ export default function Agenda(){
                 </div>
                 {/* /.content-header */}
                 {/* Main content */}
-                <section className="content">
-                    <div className="container-fluid">
-                        {/* Small boxes (Stat box) */}
-                        {/* /.row */}
-                        {/* Main row */}
-                        <div className="row">
-                            {/* Left col */}
-                            <section className="col-lg-6 connectedSortable">
-                                {/* Custom tabs (Charts with tabs)*/}
-                                <div className="card">
-                                    <div className="card-header">
-                                        <h3 className="card-title">
-                                            <i className="far fa-help-alt mr-1" />
-                                             Agenda
-                                        </h3>
-                                    </div>{/* /.card-header */}
-                                    <div className="card-body">
-                                        <div className="tab-content p-0">
-                                            {/* Morris chart - Sales */}
-                                            <div className="chart tab-pane active" id="revenue-chart" style={{ position: 'relative', height: 300 }}>
-                                                <canvas id="revenue-chart-canvas" height={300} style={{ height: 300 }} />
-                                            </div>
-                                            <div className="chart tab-pane" id="sales-chart" style={{ position: 'relative', height: 300 }}>
-                                                <canvas id="sales-chart-canvas" height={300} style={{ height: 300 }} />
-                                            </div>
-                                        </div>
-                                    </div>{/* /.card-body */}
-                                </div>
-                            </section>
-                            {/* /.Left col */}
-                            {/* right col (We are only adding the ID to make the widgets sortable)*/}
-                            <section className="col-lg-6 connectedSortable">
-                                {/* Custom tabs (Charts with tabs)*/}
-                            </section>
-                            {/* right col */}
-                        </div>
-                        {/* /.row (main row) */}
-                    </div>{/* /.container-fluid */}
-                </section>
+                
+
                 {/* /.content */}
             </div>
             <Footer />

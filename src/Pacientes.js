@@ -5,34 +5,43 @@ import Sidenav from './Components/Sidenav';
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Link } from "react-router-dom";
+import Modal1 from "./Components/Modals/Modal1";
+import Api from './Api'
 
-import Modal1 from "./Components/modals/Modal1";
 
-export default function Pacientes(){ 
+function Pacientes() {
+
+    
+    const getItems = async () => {
+        const response = await Api.get('pacientes');
+        setPacientes(response.data);
+      };
+    
+    
+    useEffect(() => {
+        getItems()
+    }, [  ]);
 
     const [showModal1, setShowModal1] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
+    const [pacientes, setPacientes] = useState([]);
 
     return (
         
+
         <div>
-            
+
             <Header />
-            <Sidenav /> 
-{/* Content Wrapper. Contains page content */}
-<div className="content-wrapper">
+            <Sidenav />
+            {/* Content Wrapper. Contains page content */}
+            <div className="content-wrapper">
                 {/* Content Header (Page header) */}
                 <div className="content-header">
                     <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-6">
+                        <div className="row mb-1">
+                            <div className="col-sm-8">
                                 <h1 className="m-0">Pacientes</h1>
-                                <Button variant="primary" onClick={() => setShowModal1(true)}>
-                                    Launch demo modal
-                                </Button>
-                                <Modal1 title="My Modal1" onClose={() => setShowModal1(false)} show={showModal1}>
-                                </Modal1>
-
                             </div>{/* /.col */}
                         </div>{/* /.row */}
                     </div>{/* /.container-fluid */}
@@ -40,49 +49,42 @@ export default function Pacientes(){
                 {/* /.content-header */}
                 {/* Main content */}
                 <section className="content">
-                    <div className="container-fluid">
-                        {/* Small boxes (Stat box) */}
-                        {/* /.row */}
-                        {/* Main row */}
-                        <div className="row">
-                            {/* Left col */}
-                            <section className="col-lg-6 connectedSortable">
-                                {/* Custom tabs (Charts with tabs)*/}
-                                <div className="card">
-                                    <div className="card-header">
-                                        <h3 className="card-title">
-                                            <i className="far fa-help-alt mr-1" />
-                                             Pacientes
-                                        </h3>
-                                    </div>{/* /.card-header */}
-                                    <div className="card-body">
-                                        <div className="tab-content p-0">
-                                            {/* Morris chart - Sales */}
-                                            <div className="chart tab-pane active" id="revenue-chart" style={{ position: 'relative', height: 300 }}>
-                                                <canvas id="revenue-chart-canvas" height={300} style={{ height: 300 }} />
-                                            </div>
-                                            <div className="chart tab-pane" id="sales-chart" style={{ position: 'relative', height: 300 }}>
-                                                <canvas id="sales-chart-canvas" height={300} style={{ height: 300 }} />
-                                            </div>
-                                        </div>
-                                    </div>{/* /.card-body */}
-                                </div>
-                            </section>
-                            {/* /.Left col */}
-                            {/* right col (We are only adding the ID to make the widgets sortable)*/}
-                            <section className="col-lg-6 connectedSortable">
-                                {/* Custom tabs (Charts with tabs)*/}
-                            </section>
-                            {/* right col */}
-                        </div>
-                        {/* /.row (main row) */}
-                    </div>{/* /.container-fluid */}
+                    <button id="btn1" class="btn btn-sm btn-outline-primary" is="dmx-button" value="" type="button"><i class="fa fa-plus"></i></button>
+                    <button id="btn2" class="btn btn-sm btn-outline-primary" data-toggle="button" is="dmx-button" value="" type="button"><i class="fa fa-filter"></i></button>
+                    <button id="btn3" class="btn btn-sm btn-outline-primary" data-toggle="button" is="dmx-button" value="" type="button"><i class="fa fa-print"></i></button>
+
+                    <table class="blueTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Código</th>
+                                <th class="text-center">Nome</th>
+                                <th class="text-center">Cpf</th>
+                                <th class="text-center">Celular</th>
+                            </tr>
+                        </thead>
+                        {pacientes.dado?.map((data) => {
+                          if (data.id !== ' '){
+                          return (<tr>
+                              <td><center><Link to="/paciente" state={{ id: data.id }}>{data.id}</Link></center></td>
+                              <td><Link to="/paciente" state={{ id: data.id }}>{data.nome}</Link></td>
+                              <td><center><Link to="/paciente" state={{ id: data.id }}>{data.cpf}</Link></center></td>
+                              <td><center><Link to="/paciente" state={{ id: data.id }}>{data.celular}</Link></center></td>
+                          </tr>
+                          );
+                          }
+                        })}
+                        <tbody>
+                        </tbody>
+                    </table>
                 </section>
                 {/* /.content */}
             </div>
             <Footer />
 
-    </div>
+        </div>
     )
-    
+
 }
+
+
+export default Pacientes;

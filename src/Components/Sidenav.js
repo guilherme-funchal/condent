@@ -68,7 +68,7 @@ export default function Child(){
                             </li>
                             <li className="nav-item">
                                 <Link to="/Administracao" className="nav-link">
-                                    <i className="nav-icon fas  fa-archive" />
+                                    <i className="nav-icon fas  fa-users" />
                                     <p>
                                         Administração
                                     </p>
