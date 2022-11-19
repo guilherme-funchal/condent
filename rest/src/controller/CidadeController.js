@@ -32,7 +32,7 @@ module.exports = {
   },
   async list(req, res) {
     try {
-      const cidades = await Cidade.findAll()
+      const cidades = await Cidade.findAll({ order: [['nome', 'ASC']]});
       if (!cidades) {
         res.status(401).json({ message: 'Não existe Cidade cadastrada' })
       }

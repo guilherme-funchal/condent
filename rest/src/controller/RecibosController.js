@@ -1,13 +1,14 @@
-const Tabela = require('../models/clinica')
+const Tabela = require('../models/recibos')
 module.exports = {
   async create(req, res) {
     try {
-      const { nome,cnpj } = req.body
-      const tabela = await Tabela.findOne({ where: { cnpj } })
+      id = 0
+      const { data,valor,prestador,responsavel,cpf,descricao,observacoes,pk_clinica,codigo_paciente } = req.body
+      const tabela = await Tabela.findOne({ where: { id } })
       if (tabela) {
         res.status(401).json({ message: "Já existe este dado" })
       } else {
-        const tabela = await Tabela.create({ nome,cnpj })
+        const tabela = await Tabela.create({ data,valor,prestador,responsavel,cpf,descricao,observacoes,pk_clinica,codigo_paciente })
         res.status(200).json({ tabela })
       }
     } catch (error) {
@@ -18,12 +19,12 @@ module.exports = {
     try {
       const { id } = req.params
 
-      const { nome,cnpj } = req.body
+      const { data,valor,prestador,responsavel,cpf,descricao,observacoes,pk_clinica,codigo_paciente } = req.body
       const tabela = await Tabela.findOne({ where: { id } })
       if (!tabela) {
         res.status(401).json({ message: "Nenhum dado encontrado" })
       } else {
-        const tabela = await Tabela.update({ nome,cnpj }, { where: { id } })
+        const tabela = await Tabela.update({ data,valor,prestador,responsavel,cpf,descricao,observacoes,pk_clinica,codigo_paciente }, { where: { id } })
         res.status(200).json({ tabela })
       }
     } catch (error) {

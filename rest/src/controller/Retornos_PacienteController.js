@@ -1,13 +1,14 @@
-const Tabela = require('../models/clinica')
+const Tabela = require('../models/retornos_paciente')
 module.exports = {
   async create(req, res) {
     try {
-      const { nome,cnpj } = req.body
-      const tabela = await Tabela.findOne({ where: { cnpj } })
+      id = 0
+      const { cod_paciente,cod_profissional,data,hora,cod_retorno,observacoes } = req.body
+      const tabela = await Tabela.findOne({ where: { id } })
       if (tabela) {
         res.status(401).json({ message: "Já existe este dado" })
       } else {
-        const tabela = await Tabela.create({ nome,cnpj })
+        const tabela = await Tabela.create({ cod_paciente,cod_profissional,data,hora,cod_retorno,observacoes })
         res.status(200).json({ tabela })
       }
     } catch (error) {
@@ -18,12 +19,12 @@ module.exports = {
     try {
       const { id } = req.params
 
-      const { nome,cnpj } = req.body
+      const { cod_paciente,cod_profissional,data,hora,cod_retorno,observacoes } = req.body
       const tabela = await Tabela.findOne({ where: { id } })
       if (!tabela) {
         res.status(401).json({ message: "Nenhum dado encontrado" })
       } else {
-        const tabela = await Tabela.update({ nome,cnpj }, { where: { id } })
+        const tabela = await Tabela.update({ cod_paciente,cod_profissional,data,hora,cod_retorno,observacoes }, { where: { id } })
         res.status(200).json({ tabela })
       }
     } catch (error) {

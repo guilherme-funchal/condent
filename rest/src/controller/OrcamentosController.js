@@ -33,7 +33,7 @@ module.exports = {
   },
   async list(req, res) {
     try {
-      const dado = await Tabela.findAll()
+      const dado = await Tabela.findAll({ order: [['nome', 'ASC']]});
       if (!dado) {
         res.status(401).json({ message: 'Não existe dado cadastrada' })
       }

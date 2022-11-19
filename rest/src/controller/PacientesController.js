@@ -30,9 +30,22 @@ module.exports = {
       res.status(400).json({ error })
     }
   },
+  async find(req, res) {
+    try {
+      const { id } = req.params
+      const tabela = await Tabela.findOne({ where: { id } })
+
+      if (!tabela) {
+        res.status(401).json({ message: 'Não existe dado cadastrada' })
+      }
+      res.status(200).json({ tabela })
+    } catch (error) {
+      res.status(400).json({ error })
+    }
+  },
   async list(req, res) {
     try {
-      const dado = await Tabela.findAll()
+      const dado = await Tabela.findAll({ order: [['nome', 'ASC']]});
       if (!dado) {
         res.status(401).json({ message: 'Não existe dado cadastrada' })
       }
