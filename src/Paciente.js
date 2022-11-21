@@ -11,10 +11,11 @@ import Api from './Api';
 import { Controller, useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-
-import Modal1 from "./Components/Modals/Modal1";
+import { useNavigate } from 'react-router-dom';
 
 export default function Paciente() {
+
+    const navigate = useNavigate();
 
     async function editUser() {
         const response = await Api.put('pacientes/' + paciente.id, paciente);
@@ -35,42 +36,40 @@ export default function Paciente() {
     async function delUser() {
         console.log("Excluir", paciente.id);
 
-            const {value: text} = await Swal.fire({
-            title: 'Excluir usuário?',
-            icon: 'question',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'Sim',
-            denyButtonText: 'Não',
-            customClass: {
-                actions: 'my-actions',
-                cancelButton: 'order-1 right-gap',
-                confirmButton: 'order-2',
-                denyButton: 'order-3',
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
 
-                const {response: text} = Api?.delete('pacientes/' + paciente.id);
+        (async () => {
+            const { value: text } = await Swal.fire({
+                title: 'Excluir usuário?',
+                icon: 'question',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'Sim',
+                denyButtonText: 'Não',
+                customClass: {
+                    actions: 'my-actions',
+                    cancelButton: 'order-1 right-gap',
+                    confirmButton: 'order-2',
+                    denyButton: 'order-3',
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                if (response.status === 200) {
+                    var response = Api.delete('pacientes/' + paciente.id);
                     Sucesso.fire({
                         icon: 'success',
                         title: 'Usuário foi excluído'
                     });
-                } else {
+
+                    navigate("/pacientes", {replace:true});
+
+                } else if (result.isDenied) {
                     Falha.fire({
                         icon: 'error',
-                        title: 'Usuário não foi excluído'
+                        title: 'Usuário não excluído'
                     });
                 }
-            } else if (result.isDenied) {
-                    Falha.fire({
-                    icon: 'error',
-                    title: 'Usuário não excluído'
-                });
-            }
-        })  
+            })
+        })()
     }
 
     const handlesubmit = () => {
@@ -296,6 +295,7 @@ export default function Paciente() {
                                                 </div>
                                                 <div className="card-footer">
                                                     <button type="submit" className="btn btn-danger" onClick={() => delUser()}>Excluir</button>
+
                                                     <button type="submit" className="btn btn-primary" onClick={() => editUser()}>Salvar</button>
                                                 </div>
                                             </div>

@@ -2,30 +2,34 @@ import React from 'react';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Sidenav from './Components/Sidenav';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from "react-router-dom";
 import Modal1 from "./Components/Modals/Modal1";
 import Api from './Api'
+import { useLocation } from 'react-router'
 
 
 function Pacientes() {
+    const location = useLocation()
 
-    
     const getItems = async () => {
         const response = await Api.get('pacientes');
         setPacientes(response.data);
+        console.log(pacientes.dado);
       };
     
     
     useEffect(() => {
         getItems()
-    }, [  ]);
+    }, [location.key]);
 
+    const [, updateState] = useState();
     const [showModal1, setShowModal1] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
     const [pacientes, setPacientes] = useState([]);
+    const forceUpdate = useCallback(() => updateState({}), []);
 
     return (
         

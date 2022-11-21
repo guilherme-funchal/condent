@@ -17,7 +17,7 @@ import { createRoot } from 'react-dom/client';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Router>
+    <Router forceRefresh={true}>
         <Routes>
           <Route path="/" element={<App />} exact/>
           <Route path="/Ajuda" element={<Ajuda />} exact/>
