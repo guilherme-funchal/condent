@@ -2,34 +2,33 @@ import React from 'react';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Sidenav from './Components/Sidenav';
-import { useState, useEffect, useCallback } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { useState, useEffect } from 'react';
+// import Button from 'react-bootstrap/Button';
+// import Modal from 'react-bootstrap/Modal';
 import { Link } from "react-router-dom";
-import Modal1 from "./Components/Modals/Modal1";
+// import Modal1 from "./Components/Modals/Modal1";
 import Api from './Api'
 import { useLocation } from 'react-router'
 
 
-function Pacientes() {
+export default function Pacientes() {
     const location = useLocation()
 
     const getItems = async () => {
         const response = await Api.get('pacientes');
         setPacientes(response.data);
-        console.log(pacientes.dado);
       };
     
     
     useEffect(() => {
         getItems()
-    }, [location.key]);
+    }, []);
 
-    const [, updateState] = useState();
-    const [showModal1, setShowModal1] = useState(false);
-    const [showModal2, setShowModal2] = useState(false);
+    // const [, updateState] = useState();
+    // const [showModal1, setShowModal1] = useState(false);
+    // const [showModal2, setShowModal2] = useState(false);
     const [pacientes, setPacientes] = useState([]);
-    const forceUpdate = useCallback(() => updateState({}), []);
+    // const forceUpdate = useCallback(() => updateState({}), []);
 
     return (
         
@@ -53,19 +52,20 @@ function Pacientes() {
                 {/* /.content-header */}
                 {/* Main content */}
                 <section className="content">
-                    <button id="btn1" class="btn btn-sm btn-outline-primary" is="dmx-button" value="" type="button"><i class="fa fa-plus"></i></button>
-                    <button id="btn2" class="btn btn-sm btn-outline-primary" data-toggle="button" is="dmx-button" value="" type="button"><i class="fa fa-filter"></i></button>
-                    <button id="btn3" class="btn btn-sm btn-outline-primary" data-toggle="button" is="dmx-button" value="" type="button"><i class="fa fa-print"></i></button>
+                    <button id="btn1" className="btn btn-sm btn-outline-primary" is="dmx-button" value="" type="button"><i className="fa fa-plus"></i></button>
+                    <button id="btn2" className="btn btn-sm btn-outline-primary" data-toggle="button" is="dmx-button" value="" type="button"><i className="fa fa-filter"></i></button>
+                    <button id="btn3" className="btn btn-sm btn-outline-primary" data-toggle="button" is="dmx-button" value="" type="button"><i className="fa fa-print"></i></button>
 
-                    <table class="blueTable">
+                    <table className="blueTable">
                         <thead>
                             <tr>
-                                <th class="text-center">Código</th>
-                                <th class="text-center">Nome</th>
-                                <th class="text-center">Cpf</th>
-                                <th class="text-center">Celular</th>
+                                <th className="text-center">Código</th>
+                                <th className="text-center">Nome</th>
+                                <th className="text-center">Cpf</th>
+                                <th className="text-center">Celular</th>
                             </tr>
                         </thead>
+                        <tbody>
                         {pacientes.dado?.map((data) => {
                           if (data.id !== ' '){
                           return (<tr>
@@ -76,8 +76,8 @@ function Pacientes() {
                           </tr>
                           );
                           }
+                          return true;
                         })}
-                        <tbody>
                         </tbody>
                     </table>
                 </section>
@@ -89,6 +89,3 @@ function Pacientes() {
     )
 
 }
-
-
-export default Pacientes;

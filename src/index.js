@@ -12,7 +12,6 @@ import Paciente from './Paciente';
 import Cadastros from './Cadastros';
 import Clinica from './Clinica';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createRoot } from 'react-dom/client';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

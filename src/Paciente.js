@@ -12,10 +12,29 @@ import { Controller, useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useNavigate } from 'react-router-dom';
+import Table from './Components/Tables/Table';
 
 export default function Paciente() {
 
     const navigate = useNavigate();
+    const column_orcamento = [
+        { heading: 'Codigo', value: 'id' },
+        { heading: 'Nome', value: 'nome' },
+        { heading: 'Valor Total', value: 'valor_total' },
+        { heading: 'Data', value: 'data' },
+        { heading: 'Estado', value: 'estado' },
+      ]
+    
+      const column_tratamento = [
+        { heading: 'Codigo', value: 'id' },
+        { heading: 'Descrição', value: 'descricao' },
+        { heading: 'Situação', value: 'situacao' },
+        { heading: 'Data inicio', value: 'data_inicio' },
+        { heading: 'Data fim', value: 'data_fim' },
+        { heading: 'Valor total', value: 'valor_total' },
+        { heading: 'Saldo', value: 'saldo' },
+      ]  
+    
 
     async function editUser() {
         const response = await Api.put('pacientes/' + paciente.id, paciente);
@@ -34,8 +53,6 @@ export default function Paciente() {
     }
 
     async function delUser() {
-        console.log("Excluir", paciente.id);
-
 
         (async () => {
             const { value: text } = await Swal.fire({
@@ -59,8 +76,8 @@ export default function Paciente() {
                         icon: 'success',
                         title: 'Usuário foi excluído'
                     });
-
-                    navigate("/pacientes", {replace:true});
+                    navigate("/pacientes");
+                    navigate(0);
 
                 } else if (result.isDenied) {
                     Falha.fire({
@@ -125,16 +142,31 @@ export default function Paciente() {
         setPaciente(response.data.tabela);
     };
 
+    const getOrcamentos = async (cod_paciente) => {
+        const response = await Api.get('orcamentos/' + cod_paciente);
+        setOrcamentos(response.data.tabela);
+        console.log("Orca->",response.data.tabela);
+    };
 
+    const getTratamentos = async (cod_paciente) => {
+        const response = await Api.get('tratamentos/' + cod_paciente);
+        setTratamentos(response.data.tabela);
+        console.log("Total Trat->", tratamentos.lenght);
+    };
 
     useEffect(() => {
-        getPaciente(location.state.id)
+        getPaciente(location.state.id);
+        getOrcamentos(location.state.id);
+        getTratamentos(location.state.id);
     }, []);
 
     let location = useLocation();
 
     const [paciente, setPaciente] = useState([]);
-
+    const [orcamentos, setOrcamentos] = useState([]);
+    const [tratamentos, setTratamentos] = useState([]);
+    const [totalTratamentos, setTotalTratamentos] = useState([]);
+    const [totalOrcamentos, setTotalOrcamentos] = useState([]);
 
     return (
 
@@ -156,13 +188,13 @@ export default function Paciente() {
                 </div>
                 {/* /.content-header */}
                 {/* Main content */}
-                <div class='row'>
-                    <div class='row'>
+                <div className='row'>
+                    <div className='row'>
 
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-sm-6">
+                <div className="row">
+                    <div className="col-12 col-sm-6">
                         <div className="card card-primary card-tabs">
                             <div className="card-header p-0 pt-1">
                                 <ul className="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
@@ -188,30 +220,30 @@ export default function Paciente() {
                                                 <div className="card-body">
                                                     <div className="row">
 
-                                                        <div class="widget-user-header bg-warning">
-                                                            <div class="widget-user-image">
-                                                                <img class="img-circle elevation-2" src="dist/img/user7-128x128.jpg" alt="User Avatar"></img>
+                                                        <div className="widget-user-header bg-warning">
+                                                            <div className="widget-user-image">
+                                                                <img className="img-circle elevation-2" src="dist/img/user7-128x128.jpg" alt="User Avatar"></img>
                                                             </div>
 
-                                                            <h3 class="widget-user-username">{paciente?.nome}</h3>
-                                                            <h5 class="widget-user-desc">{paciente?.celular}</h5>
-                                                            <h5 class="widget-user-desc">{paciente?.email}</h5>
+                                                            <h3 className="widget-user-username">{paciente?.nome}</h3>
+                                                            <h5 className="widget-user-desc">{paciente?.celular}</h5>
+                                                            <h5 className="widget-user-desc">{paciente?.email}</h5>
                                                         </div>
-                                                        <div class="card-footer p-0">
-                                                            <ul class="nav flex-column">
-                                                                <li class="nav-item">
-                                                                    <a href="#" class="nav-link">
-                                                                        Tratamentos <span class="float-right badge bg-primary">31</span>
+                                                        <div className="card-footer p-0">
+                                                            <ul className="nav flex-column">
+                                                                <li className="nav-item">
+                                                                    <a href="#" className="nav-link">
+                                                                        Tratamentos <span className="float-right badge bg-primary">{tratamentos.length}</span>
                                                                     </a>
                                                                 </li>
-                                                                <li class="nav-item">
-                                                                    <a href="#" class="nav-link">
-                                                                        Orçamentos <span class="float-right badge bg-info">5</span>
+                                                                <li className="nav-item">
+                                                                    <a href="#" className="nav-link">
+                                                                        Orçamentos <span className="float-right badge bg-info">{orcamentos.length}</span>
                                                                     </a>
                                                                 </li>
-                                                                <li class="nav-item">
-                                                                    <a href="#" class="nav-link">
-                                                                        Ficha financeira<span class="float-right badge bg-success">12</span>
+                                                                <li className="nav-item">
+                                                                    <a href="#" className="nav-link">
+                                                                        Ficha financeira<span className="float-right badge bg-success">12</span>
                                                                     </a>
                                                                 </li>
                                                             </ul>
@@ -233,7 +265,7 @@ export default function Paciente() {
                                                         </div>
                                                         <div className="col-4">
                                                             <label>Sexo</label><br></br>
-                                                            <select name="sexo" id="sexo" defaultInputValue={paciente?.sexo} onChange={(e) => paciente.sexo = e.target.value}>
+                                                            <select name="sexo" id="sexo" onChange={(e) => paciente.sexo = e.target.value}>
                                                                 <option value="f">Feminino</option>
                                                                 <option value="m">Masculino</option>
                                                             </select>
@@ -346,303 +378,233 @@ export default function Paciente() {
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6">
-                        <div class="card card-primary card-tabs">
-                            <div class="card-header p-0 pt-1">
-                                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Orçamentos</a>
+                    <div className="col-12 col-sm-6">
+                        <div className="card card-primary card-tabs">
+                            <div className="card-header p-0 pt-1">
+                                <ul className="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                                    <li className="nav-item">
+                                        <a className="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Orçamentos</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-two-trat-tab" data-toggle="pill" href="#custom-tabs-two-trat" role="tab" aria-controls="custom-tabs-two-trat" aria-selected="false">Tratamentos</a>
+                                    <li className="nav-item">
+                                        <a className="nav-link" id="custom-tabs-two-trat-tab" data-toggle="pill" href="#custom-tabs-two-trat" role="tab" aria-controls="custom-tabs-two-trat" aria-selected="false">Tratamentos</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-two-fin-tab" data-toggle="pill" href="#custom-tabs-two-fin" role="tab" aria-controls="custom-tabs-two-fin" aria-selected="false">Financeiro</a>
+                                    <li className="nav-item">
+                                        <a className="nav-link" id="custom-tabs-two-fin-tab" data-toggle="pill" href="#custom-tabs-two-fin" role="tab" aria-controls="custom-tabs-two-fin" aria-selected="false">Financeiro</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-two-file-tab" data-toggle="pill" href="#custom-tabs-two-file" role="tab" aria-controls="custom-tabs-two-file" aria-selected="false">Arquivos</a>
+                                    <li className="nav-item">
+                                        <a className="nav-link" id="custom-tabs-two-file-tab" data-toggle="pill" href="#custom-tabs-two-file" role="tab" aria-controls="custom-tabs-two-file" aria-selected="false">Arquivos</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-two-agenda-tab" data-toggle="pill" href="#custom-tabs-two-agenda" role="tab" aria-controls="custom-tabs-two-agenda" aria-selected="false">Agenda</a>
+                                    <li className="nav-item">
+                                        <a className="nav-link" id="custom-tabs-two-agenda-tab" data-toggle="pill" href="#custom-tabs-two-agenda" role="tab" aria-controls="custom-tabs-two-agenda" aria-selected="false">Agenda</a>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="card-body">
-                                <div class="tab-content" id="custom-tabs-two-tabContent">
-                                    <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                            <div className="card-body">
+                                <div className="tab-content" id="custom-tabs-two-tabContent">
+                                    <div className="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                                         <div>Orçamentos</div>
-                                        <button id="btn4" class="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
+                                        <button id="btn4" className="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
                                             <i></i>
-                                            <i class="fa fa-plus"></i>
+                                            <i className="fa fa-plus"></i>
                                         </button>
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center font-weight-bold">Código</th>
-                                                        <th class="text-center font-weight-bold">Nome do tratamento</th>
-                                                        <th class="text-center font-weight-bold">Valor total</th>
-                                                        <th class="text-center font-weight-bold">Data</th>
-                                                        <th class="text-center font-weight-bold">Estado</th>
+                                        <div className="table-responsive">
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody is="dmx-repeat" dmx-generator="bs4table" id="tableRepeat1">
-                                                    <tr>
-                                                        <td class="text-center">82</td>
-                                                        <td>Novo tratamento</td>
-                                                        <td class="text-center">R$ </td>
-                                                        <td class="text-center">15/11/2022</td>
-                                                        <td class="text-center">Criação</td>
-
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td class="text-center">83</td>
-                                                        <td>Novo tratamento</td>
-                                                        <td class="text-center">R$ </td>
-                                                        <td class="text-center">15/11/2022</td>
-                                                        <td class="text-center">Criação</td>
-
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div>Itens</div>
-                                        <button id="btn4" class="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
-                                            <i></i>
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="small text-center font-weight-bold">Item&nbsp;</th>
-
-                                                        <th class="small text-center font-weight-bold">Situação</th>
-                                                        <th class="small text-center font-weight-bold">Data inicio</th>
-                                                        <th class="small text-center font-weight-bold">Data final</th>
-
-
-                                                        <th class="text-center small font-weight-bold">Valor</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody is="dmx-repeat" dmx-generator="bs4table" id="tableRepeat5">
-                                                    <tr class="small">
-                                                        <td class="text-center">Implante</td>
-                                                        <td class="text-center">Em andamento</td>
-                                                        <td class="text-center">30/06/2022</td>
-                                                        <td class="text-center">01/07/2022</td>
-
-
-                                                        <td class="text-center">R$ 1000,00</td>
-                                                    </tr>
-
-                                                    <tr class="small">
-                                                        <td class="text-center">teste</td>
-                                                        <td class="text-center">Em andamento</td>
-                                                        <td class="text-center">30/06/2022</td>
-                                                        <td class="text-center">30/06/2022</td>
-
-
-                                                        <td class="text-center">R$ 100,00</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <Table data={orcamentos} column={column_orcamento} />
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade" id="custom-tabs-two-trat" role="tabpanel" aria-labelledby="custom-tabs-two-trat-tab">
-                                        <div class="table-responsive">
+                                    <div className="tab-pane fade" id="custom-tabs-two-trat" role="tabpanel" aria-labelledby="custom-tabs-two-trat-tab">
+                                        <div className="table-responsive">
                                             <div>Tratamentos</div>
-                                            <button id="btn4" class="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
+                                            <button id="btn4" className="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
                                                 <i></i>
-                                                <i class="fa fa-plus"></i>
+                                                <i className="fa fa-plus"></i>
                                             </button>
-                                            <table class="table table-striped table-bordered table-hover table-sm">
+                                            <Table data={tratamentos} column={column_tratamento} />
+                                            {/* <table className="table table-striped table-bordered table-hover table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center font-weight-bold">Código</th>
-                                                        <th class="text-center font-weight-bold">Nome do tratamento</th>
-                                                        <th class="text-center font-weight-bold">Valor total</th>
-                                                        <th class="text-center font-weight-bold">Data</th>
-                                                        <th class="text-center font-weight-bold">Estado</th>
+                                                        <th className="text-center font-weight-bold">Código</th>
+                                                        <th className="text-center font-weight-bold">Nome do tratamento</th>
+                                                        <th className="text-center font-weight-bold">Valor total</th>
+                                                        <th className="text-center font-weight-bold">Data</th>
+                                                        <th className="text-center font-weight-bold">Estado</th>
 
                                                     </tr>
                                                 </thead>
                                                 <tbody is="dmx-repeat" dmx-generator="bs4table" id="tableRepeat1">
                                                     <tr>
-                                                        <td class="text-center">82</td>
+                                                        <td className="text-center">82</td>
                                                         <td>Novo tratamento</td>
-                                                        <td class="text-center">R$ </td>
-                                                        <td class="text-center">15/11/2022</td>
-                                                        <td class="text-center">Criação</td>
+                                                        <td className="text-center">R$ </td>
+                                                        <td className="text-center">15/11/2022</td>
+                                                        <td className="text-center">Criação</td>
 
                                                     </tr>
 
                                                     <tr>
-                                                        <td class="text-center">83</td>
+                                                        <td className="text-center">83</td>
                                                         <td>Novo tratamento</td>
-                                                        <td class="text-center">R$ </td>
-                                                        <td class="text-center">15/11/2022</td>
-                                                        <td class="text-center">Criação</td>
+                                                        <td className="text-center">R$ </td>
+                                                        <td className="text-center">15/11/2022</td>
+                                                        <td className="text-center">Criação</td>
 
                                                     </tr>
                                                 </tbody>
-                                            </table>
-                                            <div class="col-sm-12">
+                                            </table> */}
+                                            {/* <div className="col-sm-12">
                                                 <div>Itens</div>
-                                                <button id="btn4" class="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
+                                                <button id="btn4" className="btn btn-outline-primary btn-sm" is="dmx-button" value="" type="button">
                                                     <i></i>
-                                                    <i class="fa fa-plus"></i>
+                                                    <i className="fa fa-plus"></i>
                                                 </button>
-                                                <div class="table-responsive">
-                                                    <table class="table table-striped table-bordered table-hover table-sm">
+                                                <div className="table-responsive">
+                                                    <table className="table table-striped table-bordered table-hover table-sm">
                                                         <thead>
                                                             <tr>
-                                                                <th class="small text-center font-weight-bold">Item&nbsp;</th>
+                                                                <th className="small text-center font-weight-bold">Item&nbsp;</th>
 
-                                                                <th class="small text-center font-weight-bold">Situação</th>
-                                                                <th class="small text-center font-weight-bold">Data inicio</th>
-                                                                <th class="small text-center font-weight-bold">Data final</th>
+                                                                <th className="small text-center font-weight-bold">Situação</th>
+                                                                <th className="small text-center font-weight-bold">Data inicio</th>
+                                                                <th className="small text-center font-weight-bold">Data final</th>
 
 
-                                                                <th class="text-center small font-weight-bold">Valor</th>
+                                                                <th className="text-center small font-weight-bold">Valor</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody is="dmx-repeat" dmx-generator="bs4table" id="tableRepeat5">
-                                                            <tr class="small">
-                                                                <td class="text-center">Implante</td>
-                                                                <td class="text-center">Em andamento</td>
-                                                                <td class="text-center">30/06/2022</td>
-                                                                <td class="text-center">01/07/2022</td>
+                                                            <tr className="small">
+                                                                <td className="text-center">Implante</td>
+                                                                <td className="text-center">Em andamento</td>
+                                                                <td className="text-center">30/06/2022</td>
+                                                                <td className="text-center">01/07/2022</td>
 
 
-                                                                <td class="text-center">R$ 1000,00</td>
+                                                                <td className="text-center">R$ 1000,00</td>
                                                             </tr>
 
-                                                            <tr class="small">
-                                                                <td class="text-center">teste</td>
-                                                                <td class="text-center">Em andamento</td>
-                                                                <td class="text-center">30/06/2022</td>
-                                                                <td class="text-center">30/06/2022</td>
+                                                            <tr className="small">
+                                                                <td className="text-center">teste</td>
+                                                                <td className="text-center">Em andamento</td>
+                                                                <td className="text-center">30/06/2022</td>
+                                                                <td className="text-center">30/06/2022</td>
 
 
-                                                                <td class="text-center">R$ 100,00</td>
+                                                                <td className="text-center">R$ 100,00</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="custom-tabs-two-fin" role="tabpanel" aria-labelledby="custom-tabs-two-fin-tab">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover table-sm">
+                                    <div className="tab-pane fade" id="custom-tabs-two-fin" role="tabpanel" aria-labelledby="custom-tabs-two-fin-tab">
+                                        <div className="table-responsive">
+                                            <table className="table table-striped table-bordered table-hover table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center font-weight-bold small">Código</th>
-                                                        <th class="text-center font-weight-bold small">Descrição</th>
-                                                        <th class="text-center font-weight-bold small">Situação</th>
-                                                        <th class="text-center font-weight-bold small">Data inicio&nbsp;</th>
-                                                        <th class="text-center font-weight-bold small">Data fim</th>
-                                                        <th class="text-center font-weight-bold small">Valor total</th>
-                                                        <th class="text-center font-weight-bold small">Valor pago</th>
-                                                        <th class="text-center font-weight-bold small">Valor Faturar</th>
-                                                        <th class="text-center font-weight-bold small">Saldo</th>
+                                                        <th className="text-center font-weight-bold small">Código</th>
+                                                        <th className="text-center font-weight-bold small">Descrição</th>
+                                                        <th className="text-center font-weight-bold small">Situação</th>
+                                                        <th className="text-center font-weight-bold small">Data inicio&nbsp;</th>
+                                                        <th className="text-center font-weight-bold small">Data fim</th>
+                                                        <th className="text-center font-weight-bold small">Valor total</th>
+                                                        <th className="text-center font-weight-bold small">Valor pago</th>
+                                                        <th className="text-center font-weight-bold small">Valor Faturar</th>
+                                                        <th className="text-center font-weight-bold small">Saldo</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody is="dmx-repeat" dmx-generator="bs4table" id="tableRepeat1">
-                                                    <tr class="small">
-                                                        <td class="text-center">40</td>
-                                                        <td class="text-left">Novo tratamento</td>
-                                                        <td class="text-center">Inicio</td>
-                                                        <td class="text-center">09/04/2022</td>
-                                                        <td class="text-center"></td>
-                                                        <td class="text-center">R$ 100,00</td>
-                                                        <td class="text-center">R$ </td>
-                                                        <td class="text-center">R$ </td>
-                                                        <td class="text-center text-danger font-weight-bold">R$ 100.00</td>
+                                                    <tr className="small">
+                                                        <td className="text-center">40</td>
+                                                        <td className="text-left">Novo tratamento</td>
+                                                        <td className="text-center">Inicio</td>
+                                                        <td className="text-center">09/04/2022</td>
+                                                        <td className="text-center"></td>
+                                                        <td className="text-center">R$ 100,00</td>
+                                                        <td className="text-center">R$ </td>
+                                                        <td className="text-center">R$ </td>
+                                                        <td className="text-center text-danger font-weight-bold">R$ 100.00</td>
                                                     </tr>
 
-                                                    <tr class="small">
-                                                        <td class="text-center">52</td>
-                                                        <td class="text-left">Novo tratamento</td>
-                                                        <td class="text-center">Inicio</td>
-                                                        <td class="text-center">30/06/2022</td>
-                                                        <td class="text-center"></td>
-                                                        <td class="text-center">R$ 1100,00</td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center text-danger font-weight-bold">R$ 1100.00</td>
+                                                    <tr className="small">
+                                                        <td className="text-center">52</td>
+                                                        <td className="text-left">Novo tratamento</td>
+                                                        <td className="text-center">Inicio</td>
+                                                        <td className="text-center">30/06/2022</td>
+                                                        <td className="text-center"></td>
+                                                        <td className="text-center">R$ 1100,00</td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center text-danger font-weight-bold">R$ 1100.00</td>
                                                     </tr>
 
-                                                    <tr class="small">
-                                                        <td class="text-center">55</td>
-                                                        <td class="text-left">Novo </td>
-                                                        <td class="text-center">Inicio</td>
-                                                        <td class="text-center">01/07/2022</td>
-                                                        <td class="text-center"></td>
-                                                        <td class="text-center">R$ 100,00</td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center text-danger font-weight-bold">R$ 100.00</td>
+                                                    <tr className="small">
+                                                        <td className="text-center">55</td>
+                                                        <td className="text-left">Novo </td>
+                                                        <td className="text-center">Inicio</td>
+                                                        <td className="text-center">01/07/2022</td>
+                                                        <td className="text-center"></td>
+                                                        <td className="text-center">R$ 100,00</td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center text-danger font-weight-bold">R$ 100.00</td>
                                                     </tr>
 
-                                                    <tr class="small">
-                                                        <td class="text-center">76</td>
-                                                        <td class="text-left">Novo tratamento</td>
-                                                        <td class="text-center">Inicio</td>
-                                                        <td class="text-center">22/07/2022</td>
-                                                        <td class="text-center"></td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center">R$ 0,00</td>
-                                                        <td class="text-center text-danger font-weight-bold">R$ 0.00</td>
+                                                    <tr className="small">
+                                                        <td className="text-center">76</td>
+                                                        <td className="text-left">Novo tratamento</td>
+                                                        <td className="text-center">Inicio</td>
+                                                        <td className="text-center">22/07/2022</td>
+                                                        <td className="text-center"></td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center">R$ 0,00</td>
+                                                        <td className="text-center text-danger font-weight-bold">R$ 0.00</td>
                                                     </tr>
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td class="text-right font-weight-bold fw-bold text-end small" colspan="5">Valores Totais</td>
-                                                        <td class="text-center small">R$ 1300.00</td>
-                                                        <td class="text-center small">R$ 0,00</td>
-                                                        <td class="text-center small">R$ 0.00</td>
-                                                        <td class="text-center small">R$ 1300.00</td>
+                                                        <td className="text-right font-weight-bold fw-bold text-end small" colSpan="5">Valores Totais</td>
+                                                        <td className="text-center small">R$ 1300.00</td>
+                                                        <td className="text-center small">R$ 0,00</td>
+                                                        <td className="text-center small">R$ 0.00</td>
+                                                        <td className="text-center small">R$ 1300.00</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
 
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="custom-tabs-two-file" role="tabpanel" aria-labelledby="custom-tabs-two-file-tab">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover table-sm">
+                                    <div className="tab-pane fade" id="custom-tabs-two-file" role="tabpanel" aria-labelledby="custom-tabs-two-file-tab">
+                                        <div className="table-responsive">
+                                            <table className="table table-striped table-bordered table-hover table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center small font-weight-bold">Arquivo</th>
-                                                        <th class="text-center small font-weight-bold">Descricao</th>
-                                                        <th class="text-center small font-weight-bold">Operação</th>
+                                                        <th className="text-center small font-weight-bold">Arquivo</th>
+                                                        <th className="text-center small font-weight-bold">Descricao</th>
+                                                        <th className="text-center small font-weight-bold">Operação</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody is="dmx-repeat" dmx-generator="bs4table" id="tableRepeat2">
                                                     <tr>
-                                                        <td class="small">
+                                                        <td className="small">
                                                             <a target="_blank" is="dmx-link" href="/uploads/1/40/Documento_sem_titulo_1.pdf">Documento1.pdf</a>
                                                         </td>
-                                                        <td class="text-center small"></td>
-                                                        <td class="text-center small">
-                                                            <button id="btn3" class="btn btn-sm btn-danger small" is="dmx-button" value="" type="button"><i class="fa fa-trash"></i>
+                                                        <td className="text-center small"></td>
+                                                        <td className="text-center small">
+                                                            <button id="btn3" className="btn btn-sm btn-danger small" is="dmx-button" value="" type="button"><i className="fa fa-trash"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td class="small">
+                                                        <td className="small">
                                                             <a target="_blank" is="dmx-link" href="/uploads/1/40/Documento_sem_titulo_1.pdf">Documento2.pdf</a>
                                                         </td>
-                                                        <td class="text-center small"></td>
-                                                        <td class="text-center small">
-                                                            <button id="btn3" class="btn btn-sm btn-danger small" is="dmx-button" value="" type="button"><i class="fa fa-trash"></i>
+                                                        <td className="text-center small"></td>
+                                                        <td className="text-center small">
+                                                            <button id="btn3" className="btn btn-sm btn-danger small" is="dmx-button" value="" type="button"><i className="fa fa-trash"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -650,7 +612,7 @@ export default function Paciente() {
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="custom-tabs-two-agenda" role="tabpanel" aria-labelledby="custom-tabs-two-agenda-tab">
+                                    <div className="tab-pane fade" id="custom-tabs-two-agenda" role="tabpanel" aria-labelledby="custom-tabs-two-agenda-tab">
 
                                     </div>
                                 </div>
