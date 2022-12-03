@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./Modal.css";
 
-const Modal1 = props => {
+const Modal2 = props => {
   const closeOnEscapeKeyDown = e => {
     if ((e.charCode || e.keyCode) === 27) {
       props.onClose();
     }
   };
+
+
+  console.log('entrei no modal2');
 
   useEffect(() => {
     document.body.addEventListener("keydown", closeOnEscapeKeyDown);
@@ -29,11 +32,11 @@ const Modal1 = props => {
             <h4 className="modal-title">{props.title}</h4>
           </div>
           <div className="modal-body">
-            ID : {props.id}
+            teste2
           </div>
           <div className="modal-footer">
             <button onClick={props.onClose} className="button">
-              Close1
+              Close2
             </button>
           </div>
         </div>
@@ -43,4 +46,4 @@ const Modal1 = props => {
   );
 };
 
-export default Modal1;
+export default Modal2;

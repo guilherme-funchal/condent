@@ -138,6 +138,7 @@ router.post('/orcamentos',OrcamentosController.create)
 router.put('/orcamentos/:id',OrcamentosController.update)
 router.get('/orcamentos',OrcamentosController.list)
 router.delete('/orcamentos/:id',OrcamentosController.delete)
+router.get('/orcamentos/:cod_paciente',OrcamentosController.find)
 
 router.post('/pacientes',PacientesController.create)
 router.put('/pacientes/:id',PacientesController.update)
@@ -219,5 +220,6 @@ router.post('/tratamentos',TratamentosController.create)
 router.put('/tratamentos/:id',TratamentosController.update)
 router.get('/tratamentos',TratamentosController.list)
 router.delete('/tratamentos/:id',TratamentosController.delete)
+router.get('/tratamentos/:cod_paciente',TratamentosController.find)
 
 module.exports = router

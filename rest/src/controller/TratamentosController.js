@@ -8,7 +8,7 @@ module.exports = {
       if (tabela) {
         res.status(401).json({ message: "Já existe este dado" })
       } else {
-        const tabela = await Tabela.create({ descricao,cod_paciente,forma_pagamento,situacao,tipo,data_inicio,data_fim,cod_unidade,cod_convenio,pk_clinica })
+        const tabela = await Tabela.create({ descricao,cod_paciente,forma_pagamento,situacao,tipo,data_inicio,data_fim,cod_unidade,cod_convenio,pk_clinica,saldo,valor })
         res.status(200).json({ tabela })
       }
     } catch (error) {
@@ -19,12 +19,12 @@ module.exports = {
     try {
       const { id } = req.params
 
-      const { descricao,cod_paciente,forma_pagamento,situacao,tipo,data_inicio,data_fim,cod_unidade,cod_convenio,pk_clinica } = req.body
+      const { descricao,cod_paciente,forma_pagamento,situacao,tipo,data_inicio,data_fim,cod_unidade,cod_convenio,pk_clinica,saldo,valor } = req.body
       const tabela = await Tabela.findOne({ where: { id } })
       if (!tabela) {
         res.status(401).json({ message: "Nenhum dado encontrado" })
       } else {
-        const tabela = await Tabela.update({ descricao,cod_paciente,forma_pagamento,situacao,tipo,data_inicio,data_fim,cod_unidade,cod_convenio,pk_clinica }, { where: { id } })
+        const tabela = await Tabela.update({ descricao,cod_paciente,forma_pagamento,situacao,tipo,data_inicio,data_fim,cod_unidade,cod_convenio,pk_clinica,saldo,valor }, { where: { id } })
         res.status(200).json({ tabela })
       }
     } catch (error) {
@@ -42,6 +42,19 @@ module.exports = {
       res.status(400).json({ error })
     }
   },
+  async find(req, res) {
+    try {
+      const { cod_paciente } = req.params
+      const tabela = await Tabela.findAll({ where: { cod_paciente } })
+
+      if (!tabela) {
+        res.status(401).json({ message: 'Não existe dado cadastrada' })
+      }
+      res.status(200).json({ tabela })
+    } catch (error) {
+      res.status(400).json({ error })
+    }
+  },	
   async delete(req, res) {
     const { id } = req.params
     

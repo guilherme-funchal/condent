@@ -12,6 +12,8 @@ class Tratamentos extends Model {
       data_fim: DataTypes.STRING,
       cod_unidade: DataTypes.INTEGER,
       cod_convenio: DataTypes.INTEGER,
+      valor_total: DataTypes.DECIMAL,  
+      saldo: DataTypes.DECIMAL,
       pk_clinica: DataTypes.INTEGER
     }, {
       tableName: 'tratamentos',

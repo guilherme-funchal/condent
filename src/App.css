@@ -167,8 +167,8 @@ a:hover { text-decoration: none; }
 a:active { text-decoration: none; }
 [data-href] { cursor: pointer; }
 
-.btn {
+/* .btn {
   min-width: 30px;
   max-width: 30px;
-}
+} */
 

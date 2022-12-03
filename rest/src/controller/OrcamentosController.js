@@ -42,6 +42,19 @@ module.exports = {
       res.status(400).json({ error })
     }
   },
+  async find(req, res) {
+    try {
+      const { cod_paciente } = req.params
+      const tabela = await Tabela.findAll({ where: { cod_paciente } })
+
+      if (!tabela) {
+        res.status(401).json({ message: 'Não existe dado cadastrada' })
+      }
+      res.status(200).json({ tabela })
+    } catch (error) {
+      res.status(400).json({ error })
+    }
+  },	
   async delete(req, res) {
     const { id } = req.params
     
